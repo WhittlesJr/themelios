@@ -87,7 +87,7 @@ get_custom_nixcfg() {
         echo "cloning repo via $github_httpsremote"
         github_httpsremote="https://github.com/$github_user/$github_repo"
         github_sshremote="git@github.com:$github_user/$github_repo"
-        git clone "$github_httpsremote" /tmp/cloned_remote || die "1 git_clone_and_switch git clone failed"
+        git clone --recurse-submodules "$github_httpsremote" /tmp/cloned_remote || die "1 git_clone_and_switch git clone failed"
         switch_github_remotes
         [[ $git_branch ]] && checkout_branch
     }
