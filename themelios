@@ -106,7 +106,7 @@ get_custom_nixcfg() {
 
     else
         echo "cloning repo via $git_remote"
-        git clone "$git_remote" /tmp/cloned_remote || die "2 git_clone_and_switch git clone failed"
+        git clone --recurse-submodules "$git_remote" /tmp/cloned_remote || die "2 git_clone_and_switch git clone failed"
         [[ $git_branch ]] && checkout_branch
     fi
 
@@ -382,7 +382,6 @@ boot.kernelParams = [ "elevator=noop" "boot.shell_on_fail" ];
 #boot.zfs.forceImportRoot = false;
 
 $([[ $zfs_encrypt_home == "true" ]] && cat <<- HOMECRYPT
-boot.zfs.enableUnstable = true;
 boot.zfs.requestEncryptionCredentials = true;
 HOMECRYPT
 )
@@ -402,13 +401,13 @@ monthly = $nix_zfs_extra_auto_snapshot_monthly;
 };
 
 # Use gc.automatic to keep disk space under control.
-nix.autoOptimiseStore = $nix_zfs_extra_auto_optimise_store;
+nix.settings.auto-optimise-store = $nix_zfs_extra_auto_optimise_store;
 nix.gc.automatic = $nix_zfs_extra_gc_automatic;
 nix.gc.dates = "$nix_zfs_extra_gc_dates";
 nix.gc.options = "$nix_zfs_extra_gc_options";
 
 # Clean /tmp automatically on boot.
-boot.cleanTmpDir = $nix_zfs_extra_clean_tmp_dir;
+boot.tmp.cleanOnBoot = $nix_zfs_extra_clean_tmp_dir;
 EXTRA
 )
 }
