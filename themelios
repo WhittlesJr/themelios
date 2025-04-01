@@ -332,7 +332,6 @@ fi)
 
 grub = {
 enable = true;
-version = 2;
 copyKernels = true;
 
 $(if [[ $uefi_install ]]; then
